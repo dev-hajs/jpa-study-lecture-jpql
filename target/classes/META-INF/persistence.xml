@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org.xml/ns/persistence_2_2.xsd">
+
+    <persistence-unit name="hello"> <!-- 보통 database 이름 지정 -->
+        <properties>
+            <!-- 필수 속성 (database 접근정보) -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/> <!-- JPA 가 중간에서 database 방언을 호환해준다. 높은 RDBMS 이식성. RDB 마다 다른 문법을 호환시켜줌. -->
+
+            <!-- 옵션 -->
+            <property name="hibernate.show_sql" value="true"/> <!-- query 노출여부 -->
+            <property name="hibernate.format_sql" value="true"/> <!-- query pretty formatting -->
+            <property name="hibernate.use_sql_comments" value="true"/> <!-- query 주석(호출라인) 노출여부 -->
+            <property name="hibernate.jdbc.batch_size" value="10"/> <!-- 이 사이즈만큼 모아서 database 에 한 번의 네트워크로 보내서 update (=버퍼링) -->
+            <property name="hibernate.hbm2ddl.auto" value="create"/> <!-- create:애플리케이션 실행 시점에 DDL 을 자동 생성, none:없는 옵션이라 실행되지 않음 -->
+        </properties>
+    </persistence-unit>
+</persistence>
