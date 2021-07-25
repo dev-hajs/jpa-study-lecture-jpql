@@ -25,26 +25,32 @@ public class JpaMain {
             member.setAge(10);
             em.persist(member);
 
-            /* TypedQuery<> */
-            TypedQuery<Member> query1 = em.createQuery("select m from Member m", Member.class);
-            // many result
-            List<Member> resultList = query1.getResultList();
-            for (Member member1 : resultList) {
-                System.out.println("member1 = " + member1);
+            em.flush();
+            em.clear();
+
+//            List<Member> result = em.createQuery("select m from Member m", Member.class).getResultList();
+//            Member findMember = result.get(0);
+//            findMember.setAge(20);
+
+//            List resultList = em.createQuery("select m.username, m.age from Member m").getResultList();
+//            Object o = resultList.get(0);
+//            Object[] result = (Object[]) o;
+//            for (Object o1 : result) {
+//                System.out.println("o1 = " + o1);
+//            }
+
+//            List<Object[]> resultList = em.createQuery("select m.username, m.age from Member m").getResultList();
+//            Object[] result = resultList.get(0);
+//            for (Object o : result) {
+//                System.out.println("o = " + o);
+//            }
+
+            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
+                .getResultList();
+            for (MemberDTO memberDTO : resultList) {
+                System.out.println("memberDTO.usename = " + memberDTO.getUsername());
+                System.out.println("memberDTO.age = " + memberDTO.getAge());
             }
-            // one result
-            Member result = query1.getSingleResult();
-            System.out.println("result = " + result);
-
-            // parameter
-            Member singleResult = em.createQuery("select m from Member m where m.username = :username", Member.class)
-                .setParameter("username", "member1")
-                .getSingleResult();
-            System.out.println("singleResult = " + singleResult.getUsername());
-
-            /* Query */
-            Query query3 = em.createQuery("select m.username, m.age from Member m");
-
 
             tx.commit();
         } catch (Exception e) {
