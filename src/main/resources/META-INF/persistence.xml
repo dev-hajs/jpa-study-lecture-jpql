@@ -12,6 +12,7 @@
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/> <!-- JPA 가 중간에서 database 방언을 호환해준다. 높은 RDBMS 이식성. RDB 마다 다른 문법을 호환시켜줌. -->
+<!--            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/> &lt;!&ndash; JPA 가 중간에서 database 방언을 호환해준다. 높은 RDBMS 이식성. RDB 마다 다른 문법을 호환시켜줌. -->
 
             <!-- 옵션 -->
             <property name="hibernate.show_sql" value="true"/> <!-- query 노출여부 -->

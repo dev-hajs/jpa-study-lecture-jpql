@@ -20,36 +20,24 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setUsername("member1");
-            member.setAge(10);
-            em.persist(member);
+            for (int i=0; i<100; i++) {
+                Member member = new Member();
+                member.setUsername("member"+i);
+                member.setAge(i);
+                em.persist(member);
+            }
 
             em.flush();
             em.clear();
 
-//            List<Member> result = em.createQuery("select m from Member m", Member.class).getResultList();
-//            Member findMember = result.get(0);
-//            findMember.setAge(20);
-
-//            List resultList = em.createQuery("select m.username, m.age from Member m").getResultList();
-//            Object o = resultList.get(0);
-//            Object[] result = (Object[]) o;
-//            for (Object o1 : result) {
-//                System.out.println("o1 = " + o1);
-//            }
-
-//            List<Object[]> resultList = em.createQuery("select m.username, m.age from Member m").getResultList();
-//            Object[] result = resultList.get(0);
-//            for (Object o : result) {
-//                System.out.println("o = " + o);
-//            }
-
-            List<MemberDTO> resultList = em.createQuery("select new jpql.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
+            List<Member> result = em.createQuery("select m from Member m order by m.age desc", Member.class)
+                .setFirstResult(1)
+                .setMaxResults(10)
                 .getResultList();
-            for (MemberDTO memberDTO : resultList) {
-                System.out.println("memberDTO.usename = " + memberDTO.getUsername());
-                System.out.println("memberDTO.age = " + memberDTO.getAge());
+
+            System.out.println("result.size() = " + result.size());
+            for (Member member1 : result) {
+                System.out.println("member1 = " + member1);
             }
 
             tx.commit();
