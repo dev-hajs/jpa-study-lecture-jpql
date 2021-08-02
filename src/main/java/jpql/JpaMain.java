@@ -25,20 +25,30 @@ public class JpaMain {
             em.persist(team);
 
             Member member = new Member();
-            member.setUsername("member");
+            member.setUsername("teamA");
             member.setAge(10);
+            member.setType(MemberType.ADMIN);
+
             member.setTeam(team);
             em.persist(member);
 
             em.flush();
             em.clear();
 
-            String query = "select (select avg(m1.age) from Member m1) as avgAge from Member m left join Team t on m.username = t.name";
-//            String query = "select mm.age, mm.username from (select m.age from Member m) as mm"; // 인라인 서브쿼리는 사용할 수 없다.
-            List<Member> result = em.createQuery(query, Member.class)
+            String query = "select m.username, 'HELLO', TRUE From Member m " +
+//                            "where m.username is not null";
+//                            "where m.age between 0 and 10";
+//                            "where m.type = jpql.MemberType.USER";
+                            "where m.type = :userType";
+            List<Object[]> result = em.createQuery(query)
+                .setParameter("userType", MemberType.ADMIN) // FQCN 코딩 대신에 파라미터 바인딩을 이용해도 된다.
                 .getResultList();
 
-            System.out.println("result.size() = " + result.size());
+            for (Object[] objects : result) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[1] = " + objects[1]);
+                System.out.println("objects[2] = " + objects[2]);
+            }
 
             tx.commit();
         } catch (Exception e) {
