@@ -25,7 +25,8 @@ public class JpaMain {
             em.persist(team);
 
             Member member = new Member();
-            member.setUsername("teamA");
+//            member.setUsername(null);
+            member.setUsername("관리자");
             member.setAge(10);
             member.setType(MemberType.ADMIN);
 
@@ -35,19 +36,25 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            String query = "select m.username, 'HELLO', TRUE From Member m " +
-//                            "where m.username is not null";
-//                            "where m.age between 0 and 10";
-//                            "where m.type = jpql.MemberType.USER";
-                            "where m.type = :userType";
-            List<Object[]> result = em.createQuery(query)
-                .setParameter("userType", MemberType.ADMIN) // FQCN 코딩 대신에 파라미터 바인딩을 이용해도 된다.
+            // 기본 CASE 식, 나중에 QueryDSL 사용하면 자바코드로 편하게 짤 수 있음
+//            String query =
+//                "SELECT " +
+//                    "CASE WHEN m.age <= 10 THEN '학생요금' " +
+//                    "     WHEN m.age >= 60 THEN '경로요금' " +
+//                    "     ELSE '일반요금' " +
+//                    "END " +
+//                "FROM Member m";
+
+            String query =
+//                "SELECT COALESCE(m.username, '이름 없는 회원') FROM Member m";
+                "SELECT NULLIF(m.username, '관리자') FROM Member m";
+
+
+            List<String> resultList = em.createQuery(query, String.class)
                 .getResultList();
 
-            for (Object[] objects : result) {
-                System.out.println("objects[0] = " + objects[0]);
-                System.out.println("objects[1] = " + objects[1]);
-                System.out.println("objects[2] = " + objects[2]);
+            for (String s : resultList) {
+                System.out.println("s = " + s);
             }
 
             tx.commit();
