@@ -1,5 +1,6 @@
 package jpql;
 
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,28 +22,29 @@ public class JpaMain {
 
         try {
 
+            Team team = new Team();
+            em.persist(team);
+
             Member member1 = new Member();
             member1.setUsername("관리자1");
+            member1.setTeam(team);
             em.persist(member1);
 
             Member member2 = new Member();
             member2.setUsername("관리자2");
+            member2.setTeam(team);
             em.persist(member2);
 
             em.flush();
             em.clear();
 
-//            String query = "select concat('a','b') from Member m";                // ab
-//            String query = "select substring(m.username, 2, 3) from Member m";    // 리자
-//            String query = "select locate('de', 'abcdefg') from Member m";        // 4 - Integer
-//            String query = "select size(t.members) from Team t";                  // 0 - Integer
-
-//            String query = "select function('group_concat', m.username) from Member m";
-            String query = "select group_concat(m.username) from Member m";
-            List<String> resultList = em.createQuery(query, String.class)
+//            String query = "select m.username from Member m";   // String.class
+//            String query = "select m.team from Member m";       // Team.class
+            String query = "select t.members from Team t";       // Collection.class
+            List<Collection> resultList = em.createQuery(query, Collection.class)
                 .getResultList();
 
-            for (String s : resultList) {
+            for (Object s : resultList) {
                 System.out.println("s = " + s);
             }
 
