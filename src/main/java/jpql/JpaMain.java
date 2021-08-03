@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.OrderColumn;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -20,36 +21,24 @@ public class JpaMain {
 
         try {
 
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Member member1 = new Member();
+            member1.setUsername("관리자1");
+            em.persist(member1);
 
-            Member member = new Member();
-//            member.setUsername(null);
-            member.setUsername("관리자");
-            member.setAge(10);
-            member.setType(MemberType.ADMIN);
-
-            member.setTeam(team);
-            em.persist(member);
+            Member member2 = new Member();
+            member2.setUsername("관리자2");
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
-            // 기본 CASE 식, 나중에 QueryDSL 사용하면 자바코드로 편하게 짤 수 있음
-//            String query =
-//                "SELECT " +
-//                    "CASE WHEN m.age <= 10 THEN '학생요금' " +
-//                    "     WHEN m.age >= 60 THEN '경로요금' " +
-//                    "     ELSE '일반요금' " +
-//                    "END " +
-//                "FROM Member m";
+//            String query = "select concat('a','b') from Member m";                // ab
+//            String query = "select substring(m.username, 2, 3) from Member m";    // 리자
+//            String query = "select locate('de', 'abcdefg') from Member m";        // 4 - Integer
+//            String query = "select size(t.members) from Team t";                  // 0 - Integer
 
-            String query =
-//                "SELECT COALESCE(m.username, '이름 없는 회원') FROM Member m";
-                "SELECT NULLIF(m.username, '관리자') FROM Member m";
-
-
+//            String query = "select function('group_concat', m.username) from Member m";
+            String query = "select group_concat(m.username) from Member m";
             List<String> resultList = em.createQuery(query, String.class)
                 .getResultList();
 
