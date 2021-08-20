@@ -21,6 +21,7 @@
             <property name="hibernate.use_sql_comments" value="true"/> <!-- query 주석(호출라인) 노출여부 -->
             <property name="hibernate.jdbc.batch_size" value="10"/> <!-- 이 사이즈만큼 모아서 database 에 한 번의 네트워크로 보내서 update (=버퍼링) -->
             <property name="hibernate.hbm2ddl.auto" value="create"/> <!-- create:애플리케이션 실행 시점에 DDL 을 자동 생성, none:없는 옵션이라 실행되지 않음 -->
+            <property name="hibernate.default_batch_fetch_size" value="100"/> <!-- 적절하게 1000 이하의 값으로 global setting 을 할 수 있다 -->
         </properties>
     </persistence-unit>
 </persistence>

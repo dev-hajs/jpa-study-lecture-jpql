@@ -57,8 +57,12 @@ public class JpaMain {
 //            }
 
             /* 컬렉션 페치 조인 */
-            String query = "SELECT distinct t FROM Team t JOIN FETCH t.members";
+//            String query = "SELECT t FROM Team t JOIN FETCH t.members as m"; // 별칭 X
+//            String query = "SELECT m FROM Member m JOIN FETCH m.team t";
+            String query = "SELECT t FROM Team t";
             List<Team> resultList = em.createQuery(query, Team.class)
+                .setFirstResult(0)
+                .setMaxResults(2)
                 .getResultList();
             for (Team team : resultList) {
                 System.out.println("team = " + team.getName() + " | members=" + team.getMembers().size());
