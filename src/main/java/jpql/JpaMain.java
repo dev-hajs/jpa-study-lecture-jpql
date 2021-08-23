@@ -45,31 +45,15 @@ public class JpaMain {
             em.flush();
             em.clear();
 
-            /* 엔티티 페치 조인 */
-//            String query = "SELECT m FROM Member m JOIN FETCH m.team";
-//            List<Member> resultList = em.createQuery(query, Member.class)
-//                .getResultList();
-//            for (Member member : resultList) {
-//                System.out.println("member = " + member.getUsername() + " , " + member.getTeam().getName());
-                // 회원1, 팀A(SQL)
-                // 회원2, 팀A(1차캐시)
-                // 회원3, 팀B(SQL)
-//            }
-
-            /* 컬렉션 페치 조인 */
-//            String query = "SELECT t FROM Team t JOIN FETCH t.members as m"; // 별칭 X
-//            String query = "SELECT m FROM Member m JOIN FETCH m.team t";
-            String query = "SELECT t FROM Team t";
-            List<Team> resultList = em.createQuery(query, Team.class)
-                .setFirstResult(0)
-                .setMaxResults(2)
-                .getResultList();
-            for (Team team : resultList) {
-                System.out.println("team = " + team.getName() + " | members=" + team.getMembers().size());
-                for (Member member : team.getMembers()) {
-                    System.out.println(" -> member = " + member);
-                }
-            }
+//            String query = "SELECT m FROM Member m where m = :member"; // 엔티티를 파라미터로 전달
+//            String query = "SELECT m FROM Member m where m.id = :memberId"; // 식별자를 직접 사용
+            String query = "SELECT m FROM Member m where m.team = :team"; // 외래 키 값 직접 사용
+            Member findMember = em.createQuery(query, Member.class)
+//                .setParameter("member", member1)
+//                .setParameter("memberId", member1.getId())
+                .setParameter("team", teamB)
+                .getSingleResult();
+            System.out.println("findMember = " + findMember);
 
             tx.commit();
         } catch (Exception e) {
